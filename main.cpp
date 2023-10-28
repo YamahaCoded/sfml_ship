@@ -1,29 +1,24 @@
 #include <SFML/Graphics.hpp>
+#include "player.hpp"
+using namespace sf;
 
 int main(){
-    
-    sf::Color background(16, 16, 16);
+	RenderWindow w(VideoMode(800, 600), "hi mom");
+	w.setFramerateLimit(60);
+	
+	Player player;
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Example");
-    window.setFramerateLimit(60);
+	while (w.isOpen()){
+		Event event;
+		while (w.pollEvent(event)){
+			if(event.type == Event::Closed)
+				w.close();
+		}
 
-    sf::Texture space_ship;
-    if(!space_ship.loadFromFile("./ship.png")){
-        return -1;
-    }
-
-    sf::Sprite spr_space_ship(space_ship);
-
-    while(window.isOpen()){
-        sf::Event event;
-        while(window.pollEvent(event)){
-            if(event.type == sf::Event::Closed){
-                window.close();
-            }
-        }
-        window.clear(background);
-        window.draw(spr_space_ship);       
-        window.display();
-    }
-    return 0;
+	player.update();
+	w.clear();
+	player.draw(w);
+	w.display();
+	}
+	return 0;
 }
