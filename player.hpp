@@ -9,7 +9,14 @@ class Player{
 		Player();
 		void update();
 		void draw(RenderWindow &w);
+		
 	private:
+		float A = 0.2f;
+		float spd = 0.0f;
+		float maxSpd = 8.0f;
+		float friction = 0.06f;
+		void movement();
+		void warp();
 		Texture texture;
 		Sprite sprite;
 };
