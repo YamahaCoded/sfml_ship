@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include "bullet.hpp"
 using namespace sf;
 
 class Player{
@@ -9,7 +10,9 @@ class Player{
 		Player();
 		void update();
 		void draw(RenderWindow &w);
-		
+		void shoot(std::vector<Bullet> &bullets);
+		bool canShoot = true; 
+
 	private:
 		float A = 0.2f;
 		float spd = 0.0f;
