@@ -5,8 +5,9 @@ CC = g++
 CFLAGS = -DSFML_STATIC -Os -s 
 
 # Libs
-LIBS = -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lwinmm -lgdi32 -mwindows -lopenal32 -static-libstdc++ -static-libgcc
-
+LIBS = 
+LIBSWINDOWS = -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lwinmm -lgdi32 -mwindows -lopenal32 -static-libstdc++ -static-libgcc
+LIBSLINUX = -lsfml-graphics -lsfml-window -lsfml-system
 # Source files
 SRCS = src/*.cpp 
 
@@ -20,7 +21,7 @@ ifeq ($(OS), Windows_NT)
 else 
 	INCLUDE_FOLDER =
 	LIB_FOLDER = 
-	LIBS := $(filter-out -lopengl32 -lwinmm -lgdi32 -mwindows -lopenal32 -static-libstdc++ -static-libgcc, $(LIBS))
+	LIBS := $(filter-out LIBSWINDOWS, $(-lsfml-graphics -lsfml-window -lsfml-system))
 endif
 
 # Build binary
