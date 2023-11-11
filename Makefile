@@ -21,8 +21,9 @@ ifeq ($(OS), Windows_NT)
 	LIBS := $(LIBSWINDOWS)
 else 
 	INCLUDE_FOLDER =
-	LIB_FOLDER = 
+	LIB_FOLDER =
 	LIBS := $(LIBSLINUX)
+	CFLAGS := $(filter-out -DSFML_STATIC)
 endif
 
 # Build binary
