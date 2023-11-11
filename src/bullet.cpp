@@ -5,7 +5,6 @@ Bullet::Bullet(float x, float y){
     shape.setRadius(2.0f);
     shape.setPosition(x-2, y);
     shape.setFillColor(Color::White);
-
 }
 
 void Bullet::update(){
@@ -21,4 +20,9 @@ void Bullet::draw(RenderWindow &w){
 bool Bullet::isOutOfBounds(){
     //Check if bullets still on screen
     return shape.getPosition().y < 0 || shape.getPosition().y > 300;
+}
+
+FloatRect Bullet::getBounds(){
+    //Gets bullet bounds
+    return shape.getGlobalBounds();
 }

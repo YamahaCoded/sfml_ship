@@ -10,6 +10,7 @@ class Bullet{
         void update();
         void draw(RenderWindow &w);
         bool isOutOfBounds();
+        FloatRect getBounds();
 
     private:
         float spd = 5.0f;

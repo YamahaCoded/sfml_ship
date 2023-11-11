@@ -2,7 +2,6 @@
 #define ASTEROID_H
 
 #include <SFML/Graphics.hpp>
-#include "bullet.hpp"
 using namespace sf;
 
 class Asteroid{
@@ -12,6 +11,7 @@ class Asteroid{
         void draw(RenderWindow &w);
         void resetPos();
         bool isOutOfBounds();
+        FloatRect getBounds();
 
     private:
         void movement();

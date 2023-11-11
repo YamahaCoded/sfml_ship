@@ -57,7 +57,20 @@ int main(){
 
         //Updates Asteroid
         asteroid.update();
-        
+
+        //Checks Collisions
+        auto bulletIt = bullets.begin();
+        for(auto &bullet : bullets){
+            FloatRect bulletBounds = bullet.getBounds();
+            FloatRect asteroidBounds = asteroid.getBounds();
+
+            if(bulletBounds.intersects(asteroidBounds)){
+                asteroid.resetPos();
+                bulletIt = bullets.erase(bulletIt);
+            }
+        }
+
+
         //Clear window
         w.clear();
 
