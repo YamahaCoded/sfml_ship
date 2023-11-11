@@ -5,6 +5,7 @@ Bullet::Bullet(float x, float y){
     shape.setRadius(2.0f);
     shape.setPosition(x-2, y);
     shape.setFillColor(Color::White);
+
 }
 
 void Bullet::update(){

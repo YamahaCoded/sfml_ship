@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "player.hpp"
 #include "bullet.hpp"
+#include "asteroid.hpp"
 using namespace sf;
 
 int main(){
@@ -11,6 +12,7 @@ int main(){
     //Creates the player and the bullets he will shoot
     Player player;
     std::vector<Bullet> bullets; 
+    Asteroid asteroid;
 
     //Handles window events, like closing, losing focus and resizing (this last one still terrible, i'll try to fix in the future)
     while(w.isOpen()){
@@ -49,11 +51,19 @@ int main(){
             return bullet.isOutOfBounds();
         }), bullets.end());
 
+        if(asteroid.isOutOfBounds() == true){
+            asteroid.resetPos();
+        }
+
+        //Updates Asteroid
+        asteroid.update();
+        
         //Clear window
         w.clear();
 
         //Draw stuff if needed
         player.draw(w);
+        asteroid.draw(w);
 
         for(auto &bullet : bullets){
             bullet.draw(w);
