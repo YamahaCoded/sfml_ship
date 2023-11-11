@@ -12,7 +12,7 @@ class Bullet{
         bool isOutOfBounds();
 
     private:
-        float speed = 5.0f;
+        float spd = 5.0f;
         CircleShape shape;
 };
 

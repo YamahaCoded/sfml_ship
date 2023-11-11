@@ -4,12 +4,15 @@
 using namespace sf;
 
 int main(){
+    //Render window and limit fps
     RenderWindow w(VideoMode(400, 300), "Ship");
     w.setFramerateLimit(60);
 
+    //Creates the player and the bullets he will shoot
     Player player;
     std::vector<Bullet> bullets; 
 
+    //Handles window events, like closing, losing focus and resizing (this last one still terrible, i'll try to fix in the future)
     while(w.isOpen()){
         Event event;
         while (w.pollEvent(event)){
@@ -25,12 +28,15 @@ int main(){
             }
         }
 
+        //Call player update function
         player.update();
 
+        //Avoid bullet spam
 		if(bullets.empty()){
             player.canShoot = true; 
         }
         
+        //Check if space is pressed to shoot bullets, updates bullets and erase them if they are out of bounds
         if(Keyboard::isKeyPressed(Keyboard::Space)){
             player.shoot(bullets);
         }
@@ -43,13 +49,17 @@ int main(){
             return bullet.isOutOfBounds();
         }), bullets.end());
 
+        //Clear window
         w.clear();
+
+        //Draw stuff if needed
         player.draw(w);
 
         for(auto &bullet : bullets){
             bullet.draw(w);
         }
 
+        //Displays window
         w.display();
     }
     return 0;
