@@ -18,10 +18,11 @@ TARGET = Ship
 ifeq ($(OS), Windows_NT)
 	INCLUDE_FOLDER = -Iinclude
 	LIB_FOLDER = -Llib
+	LIBS := $(LIBSWINDOWS)
 else 
 	INCLUDE_FOLDER =
 	LIB_FOLDER = 
-	LIBS := $(filter-out LIBSWINDOWS, $(-lsfml-graphics -lsfml-window -lsfml-system))
+	LIBS := $(LIBSLINUX)
 endif
 
 # Build binary
