@@ -23,7 +23,7 @@ else
 	INCLUDE_FOLDER =
 	LIB_FOLDER =
 	LIBS := $(LIBSLINUX)
-	CFLAGS := $(filter-out -DSFML_STATIC)
+	CFLAGS := $(filter-out -DSFML_STATIC, $(CFLAGS))
 endif
 
 # Build binary
