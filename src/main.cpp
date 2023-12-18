@@ -4,12 +4,67 @@
 #include "asteroid.hpp"
 using namespace sf;
 
+void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroid &asteroid){
+    //Call player update function
+    player.update();
+
+    //Avoid bullet spam
+	if(bullets.empty()){
+        player.canShoot = true; 
+    }
+
+    //Check if space is pressed to shoot bullets, updates bullets and erase them if they are out of bounds
+    if(Keyboard::isKeyPressed(Keyboard::Space)){
+        player.shoot(bullets);
+    }
+
+    for(auto &bullet : bullets){
+        bullet.update();
+    }
+
+    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](Bullet &bullet){
+        return bullet.isOutOfBounds();
+    }), bullets.end());
+
+    if(asteroid.isOutOfBounds() == true){
+        asteroid.resetPos();
+    }
+
+    //Updates Asteroid
+    asteroid.update();
+
+    //Checks Collisions
+    auto bulletIt = bullets.begin();
+    for(auto &bullet : bullets){
+        FloatRect bulletBounds = bullet.getBounds();
+        FloatRect asteroidBounds = asteroid.getBounds();
+
+        if(bulletBounds.intersects(asteroidBounds)){
+            asteroid.resetPos();
+            bulletIt = bullets.erase(bulletIt);
+        }
+    }
+
+    //Clear window
+    w.clear();
+
+    //Draw stuff if needed
+    player.draw(w);
+    asteroid.draw(w);
+
+    for(auto &bullet : bullets){
+        bullet.draw(w);
+    }
+
+    //Displays window
+    w.display();
+}
+
 int main(){
     //Render window and limit fps
     RenderWindow w(VideoMode(400, 300), "Ship");
     w.setFramerateLimit(60);
 
-    //Creates the player and the bullets he will shoot
     Player player;
     std::vector<Bullet> bullets; 
     Asteroid asteroid;
@@ -29,61 +84,7 @@ int main(){
                 w.waitEvent(event);
             }
         }
-
-        //Call player update function
-        player.update();
-
-        //Avoid bullet spam
-		if(bullets.empty()){
-            player.canShoot = true; 
-        }
-        
-        //Check if space is pressed to shoot bullets, updates bullets and erase them if they are out of bounds
-        if(Keyboard::isKeyPressed(Keyboard::Space)){
-            player.shoot(bullets);
-        }
-
-        for(auto &bullet : bullets){
-            bullet.update();
-        }
-
-        bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](Bullet &bullet){
-            return bullet.isOutOfBounds();
-        }), bullets.end());
-
-        if(asteroid.isOutOfBounds() == true){
-            asteroid.resetPos();
-        }
-
-        //Updates Asteroid
-        asteroid.update();
-
-        //Checks Collisions
-        auto bulletIt = bullets.begin();
-        for(auto &bullet : bullets){
-            FloatRect bulletBounds = bullet.getBounds();
-            FloatRect asteroidBounds = asteroid.getBounds();
-
-            if(bulletBounds.intersects(asteroidBounds)){
-                asteroid.resetPos();
-                bulletIt = bullets.erase(bulletIt);
-            }
-        }
-
-
-        //Clear window
-        w.clear();
-
-        //Draw stuff if needed
-        player.draw(w);
-        asteroid.draw(w);
-
-        for(auto &bullet : bullets){
-            bullet.draw(w);
-        }
-
-        //Displays window
-        w.display();
+        game(w, player, bullets, asteroid);
     }
     return 0;
 }
