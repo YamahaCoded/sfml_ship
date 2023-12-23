@@ -3,7 +3,7 @@
 
 Asteroid::Asteroid(){
     //Loads Asteroid stuff
-    if (!texture.loadFromFile("asteroid.png")){
+    if(!texture.loadFromFile("./resources/asteroid.png")){
     }
 
     sprite.setTexture(texture);

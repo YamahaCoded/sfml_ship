@@ -4,7 +4,92 @@
 #include "asteroid.hpp"
 using namespace sf;
 
-void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroid &asteroid){
+enum GameState{
+    MENU,
+    GAME,
+    PAUSE,
+    GAMEOVER
+};
+
+void menu(RenderWindow &w){
+    //Loads font and draw text on screen
+    Font font;
+    if(!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
+    }
+
+    Text shipText;
+    shipText.setFont(font);
+    shipText.setCharacterSize(40);
+    shipText.setFillColor(Color::White);
+    shipText.setString("Ship!");
+    shipText.setPosition(110, 100);
+
+    Text startText;
+    startText.setFont(font);
+    startText.setCharacterSize(10);
+    startText.setFillColor(Color::White);
+    startText.setString("Press Enter to Start");
+    startText.setPosition(100, 160);
+
+    w.clear();
+    w.draw(shipText);
+    w.draw(startText);
+    w.display();
+}
+
+void pause(RenderWindow &w){
+    //Loads font and draw text on screen
+    Font font;
+    if(!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
+    }
+
+    Text pauseText;
+    pauseText.setFont(font);
+    pauseText.setCharacterSize(40);
+    pauseText.setFillColor(Color::White);
+    pauseText.setString("Paused!");
+    pauseText.setPosition(70, 100);
+
+    Text resumeText;
+    resumeText.setFont(font);
+    resumeText.setCharacterSize(10);
+    resumeText.setFillColor(Color::White);
+    resumeText.setString("Press Enter to Resume");
+    resumeText.setPosition(90, 160);
+
+    w.clear();
+    w.draw(pauseText);
+    w.draw(resumeText);
+    w.display();
+}
+
+void gameover(RenderWindow &w){
+    //Loads font and draw text on screen
+    Font font;
+    if(!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
+    }
+
+    Text pauseText;
+    pauseText.setFont(font);
+    pauseText.setCharacterSize(40);
+    pauseText.setFillColor(Color::White);
+    pauseText.setString("GameOver");
+    pauseText.setPosition(45, 100);
+
+    Text resumeText;
+    resumeText.setFont(font);
+    resumeText.setCharacterSize(10);
+    resumeText.setFillColor(Color::White);
+    resumeText.setString("Press Enter");
+    resumeText.setPosition(140, 160);
+
+    w.clear();
+    w.draw(pauseText);
+    w.draw(resumeText);
+    w.display();
+}
+
+void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroid &asteroid, GameState &gameState){
     //Call player update function
     player.update();
 
@@ -45,6 +130,10 @@ void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroi
         }
     }
 
+    if(player.getBounds().intersects(asteroid.getBounds())){
+        gameState = GameState::GAMEOVER;
+    }
+
     //Clear window
     w.clear();
 
@@ -64,12 +153,13 @@ int main(){
     //Render window and limit fps
     RenderWindow w(VideoMode(400, 300), "Ship");
     w.setFramerateLimit(60);
-
+    
     Player player;
     std::vector<Bullet> bullets; 
     Asteroid asteroid;
+    GameState gameState = GameState::MENU;
 
-    //Handles window events, like closing, losing focus and resizing (this last one still terrible, i'll try to fix in the future)
+    //Handles window events, like closing, losing focus, resizing (this last one still terrible, i'll try it somehow) and game states
     while(w.isOpen()){
         Event event;
         while (w.pollEvent(event)){
@@ -83,8 +173,47 @@ int main(){
             if(event.type == Event::LostFocus){
                 w.waitEvent(event);
             }
+            if(event.type == Event::KeyPressed && event.key.code == Keyboard::Enter){
+                switch(gameState){
+                    case GameState::MENU:
+                        gameState = GameState::GAME;
+                        break;
+
+                    case GameState::GAME:
+                        gameState = GameState::PAUSE;
+                        break;
+
+                    case GameState::PAUSE:
+                        gameState = GameState::GAME;
+                        break;
+                    
+                    case GameState::GAMEOVER:
+                        gameState = GameState::MENU;
+                        break;
+                }
+            }
         }
-        game(w, player, bullets, asteroid);
+        //Handles game states
+        switch(gameState){
+            case GameState::MENU:
+                menu(w);
+                break;
+
+            case GameState::GAME:
+                game(w, player, bullets, asteroid, gameState);
+                break;
+
+            case GameState::PAUSE:
+                pause(w);
+                break;
+
+            case GameState::GAMEOVER:
+                gameover(w);
+                player.resetPos();
+                asteroid.resetPos();
+                bullets.clear();
+                break;
+        }
     }
     return 0;
 }

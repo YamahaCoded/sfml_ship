@@ -2,7 +2,7 @@
 
 Player::Player(){
     //Defines player stuff like sprite, size and initial position
-    if (!texture.loadFromFile("ship.png")){
+    if(!texture.loadFromFile("./resources/ship.png")){
     }
     sprite.setTexture(texture);
     sprite.setPosition(200.0f - 15.0f, 250.0f);
@@ -62,10 +62,20 @@ void Player::draw(RenderWindow &w){
     w.draw(sprite);
 }
 
+void Player::resetPos(){
+    //Resets player position when needed
+    sprite.setPosition(200.0f - 15.0f, 250.0f);
+}
+
 void Player::shoot(std::vector<Bullet> &bullets){
     //Avoids bullet spam
     if(canShoot){ 
         bullets.push_back(Bullet(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y));
         canShoot = false; 
     }
+}
+
+FloatRect Player::getBounds(){
+    //Checks bounds
+    return sprite.getGlobalBounds();
 }

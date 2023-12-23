@@ -11,7 +11,9 @@ class Player{
 		void update();
 		void draw(RenderWindow &w);
 		void shoot(std::vector<Bullet> &bullets);
+		void resetPos();
 		bool canShoot = true; 
+		FloatRect getBounds();
 
 	private:
 		float A = 0.2f;
