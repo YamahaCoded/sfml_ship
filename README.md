@@ -1,6 +1,6 @@
 # Ship (SFML)
-unfinished project using sfml (still in development)  
-it's just an simple space shooter
+Unfinished project using sfml (still in development)  
+It's just an simple space shooter
 
 ## License
 
