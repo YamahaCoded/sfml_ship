@@ -19,7 +19,7 @@ void Bullet::draw(RenderWindow &w){
 
 bool Bullet::isOutOfBounds(){
     //Check if bullets still on screen
-    return shape.getPosition().y < 0 || shape.getPosition().y > 300;
+    return shape.getPosition().y < -shape.getGlobalBounds().height - 60 || shape.getPosition().y > 300;
 }
 
 FloatRect Bullet::getBounds(){

@@ -30,7 +30,7 @@ void menu(RenderWindow &w){
     startText.setFillColor(Color::White);
     startText.setString("Press Enter to Start");
     startText.setPosition(100, 160);
-
+    
     w.clear();
     w.draw(shipText);
     w.draw(startText);
@@ -57,6 +57,7 @@ void pause(RenderWindow &w){
     resumeText.setString("Press Enter to Resume");
     resumeText.setPosition(90, 160);
 
+
     w.clear();
     w.draw(pauseText);
     w.draw(resumeText);
@@ -69,23 +70,23 @@ void gameover(RenderWindow &w){
     if(!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
     }
 
-    Text pauseText;
-    pauseText.setFont(font);
-    pauseText.setCharacterSize(40);
-    pauseText.setFillColor(Color::White);
-    pauseText.setString("GameOver");
-    pauseText.setPosition(45, 100);
+    Text gameoverText;
+    gameoverText.setFont(font);
+    gameoverText.setCharacterSize(40);
+    gameoverText.setFillColor(Color::White);
+    gameoverText.setString("GameOver");
+    gameoverText.setPosition(45, 100);
 
-    Text resumeText;
-    resumeText.setFont(font);
-    resumeText.setCharacterSize(10);
-    resumeText.setFillColor(Color::White);
-    resumeText.setString("Press Enter");
-    resumeText.setPosition(140, 160);
+    Text pressEnterText;
+    pressEnterText.setFont(font);
+    pressEnterText.setCharacterSize(10);
+    pressEnterText.setFillColor(Color::White);
+    pressEnterText.setString("Press Enter");
+    pressEnterText.setPosition(140, 160);
 
     w.clear();
-    w.draw(pauseText);
-    w.draw(resumeText);
+    w.draw(gameoverText);
+    w.draw(pressEnterText);
     w.display();
 }
 
@@ -152,6 +153,9 @@ void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroi
 int main(){
     //Render window and limit fps
     RenderWindow w(VideoMode(400, 300), "Ship");
+    Vector2u originalSize = w.getSize();
+    float aspectRatio = float(originalSize.x) / float(originalSize.y);
+
     w.setFramerateLimit(60);
     
     Player player;
@@ -159,16 +163,22 @@ int main(){
     Asteroid asteroid;
     GameState gameState = GameState::MENU;
 
-    //Handles window events, like closing, losing focus, resizing (this last one still terrible, i'll try it somehow) and game states
+    //Handles window events, like closing, losing focus, resizing (still working on this) and game states
     while(w.isOpen()){
         Event event;
         while (w.pollEvent(event)){
             if(event.type == Event::Closed)
                 w.close();
             if(event.type == Event::Resized){
-                View view = w.getView();
-                view.setSize(float (event.size.width), float (event.size.height));
-                w.setView(view);
+                Vector2u newSize = w.getSize();
+                float newAspectRatio = float(newSize.x) / float(newSize.y);
+
+                if(newAspectRatio != aspectRatio){
+                    unsigned int newWidth = newSize.x;
+                    unsigned int newHeight = uintmax_t (newWidth / aspectRatio);
+
+                    w.setSize(Vector2u(newWidth, newHeight));
+                }
             }
             if(event.type == Event::LostFocus){
                 w.waitEvent(event);

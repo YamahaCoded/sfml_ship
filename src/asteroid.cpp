@@ -7,7 +7,7 @@ Asteroid::Asteroid(){
     }
 
     sprite.setTexture(texture);
-    sprite.setPosition(randomX(50, 350), -30);
+    sprite.setPosition(randomX(50, 350), -sprite.getGlobalBounds().height - 65);
     sprite.setScale(2, 2);
     
 }
@@ -34,7 +34,7 @@ void Asteroid::update(){
 
 void Asteroid::resetPos(){
     //Resets position
-    sprite.setPosition(randomX(50, 350), -30);
+    sprite.setPosition(randomX(100, 300), -sprite.getGlobalBounds().height - 65);
 }
 
 int Asteroid::randomX(int a, int b){
