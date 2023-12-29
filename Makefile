@@ -2,7 +2,7 @@
 CC = g++
 
 # Flags 
-CFLAGS = -DSFML_STATIC -Os -s 
+CFLAGS = -DSFML_STATIC 
 
 # Libs
 LIBS = 
@@ -23,7 +23,7 @@ else
 	INCLUDE_FOLDER =
 	LIB_FOLDER =
 	LIBS := $(LIBSLINUX)
-	CFLAGS := $(filter-out -DSFML_STATIC)
+	CFLAGS := $(filter-out -DSFML_STATIC, $(CFLAGS))
 endif
 
 # Build binary
