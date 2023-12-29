@@ -3,7 +3,7 @@ Unfinished project using sfml (still in development)
 It's just an simple space shooter
 
 ## License
-Copyright 2023 YamahaCoded
+Copyright 2023, YamahaCoded
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
