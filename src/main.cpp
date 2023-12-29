@@ -11,82 +11,41 @@ enum GameState{
     GAMEOVER
 };
 
-void menu(RenderWindow &w){
-    //Loads font and draw text on screen
+int score = 0;
+
+void drawText(RenderWindow &w, const std::string &text, const Vector2f &position, int characterSize = 15){
+    //Function to make it simple to draw text
     Font font;
-    if(!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
+    if (!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
     }
 
-    Text shipText;
-    shipText.setFont(font);
-    shipText.setCharacterSize(40);
-    shipText.setFillColor(Color::White);
-    shipText.setString("Ship!");
-    shipText.setPosition(110, 100);
+    Text displayText;
+    displayText.setFont(font);
+    displayText.setCharacterSize(characterSize);
+    displayText.setFillColor(Color::White);
+    displayText.setString(text);
+    displayText.setPosition(position);
+    w.draw(displayText);
+}
 
-    Text startText;
-    startText.setFont(font);
-    startText.setCharacterSize(10);
-    startText.setFillColor(Color::White);
-    startText.setString("Press Enter to Start");
-    startText.setPosition(100, 160);
-    
+void menu(RenderWindow &w){
     w.clear();
-    w.draw(shipText);
-    w.draw(startText);
+    drawText(w, "Ship!", Vector2f(110, 100), 40);
+    drawText(w, "Press Enter to Start", Vector2f(100, 160), 10);
     w.display();
 }
 
 void pause(RenderWindow &w){
-    //Loads font and draw text on screen
-    Font font;
-    if(!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
-    }
-
-    Text pauseText;
-    pauseText.setFont(font);
-    pauseText.setCharacterSize(40);
-    pauseText.setFillColor(Color::White);
-    pauseText.setString("Paused!");
-    pauseText.setPosition(70, 100);
-
-    Text resumeText;
-    resumeText.setFont(font);
-    resumeText.setCharacterSize(10);
-    resumeText.setFillColor(Color::White);
-    resumeText.setString("Press Enter to Resume");
-    resumeText.setPosition(90, 160);
-
-
     w.clear();
-    w.draw(pauseText);
-    w.draw(resumeText);
+    drawText(w, "Paused!", Vector2f(70, 100), 40);
+    drawText(w, "Press Enter to Resume", Vector2f(90, 160), 10);
     w.display();
 }
 
 void gameover(RenderWindow &w){
-    //Loads font and draw text on screen
-    Font font;
-    if(!font.loadFromFile("./resources/PressStart2P-Regular.ttf")){
-    }
-
-    Text gameoverText;
-    gameoverText.setFont(font);
-    gameoverText.setCharacterSize(40);
-    gameoverText.setFillColor(Color::White);
-    gameoverText.setString("GameOver");
-    gameoverText.setPosition(45, 100);
-
-    Text pressEnterText;
-    pressEnterText.setFont(font);
-    pressEnterText.setCharacterSize(10);
-    pressEnterText.setFillColor(Color::White);
-    pressEnterText.setString("Press Enter");
-    pressEnterText.setPosition(140, 160);
-
     w.clear();
-    w.draw(gameoverText);
-    w.draw(pressEnterText);
+    drawText(w, "GameOver", Vector2f(45, 100), 40);
+    drawText(w, "Press Enter", Vector2f(140, 160), 10);
     w.display();
 }
 
@@ -119,7 +78,7 @@ void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroi
     //Updates Asteroid
     asteroid.update();
 
-    //Checks Collisions
+    //Checks Collisions and Gameover
     auto bulletIt = bullets.begin();
     for(auto &bullet : bullets){
         FloatRect bulletBounds = bullet.getBounds();
@@ -128,11 +87,13 @@ void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroi
         if(bulletBounds.intersects(asteroidBounds)){
             asteroid.resetPos();
             bulletIt = bullets.erase(bulletIt);
+            score += 5;
         }
     }
 
     if(player.getBounds().intersects(asteroid.getBounds())){
         gameState = GameState::GAMEOVER;
+        score = 0;
     }
 
     //Clear window
@@ -141,6 +102,7 @@ void game(RenderWindow &w, Player &player, std::vector<Bullet> &bullets, Asteroi
     //Draw stuff if needed
     player.draw(w);
     asteroid.draw(w);
+    drawText(w, "Score: " + std::to_string(score), Vector2f(10, 10), 12);
 
     for(auto &bullet : bullets){
         bullet.draw(w);
