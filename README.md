@@ -2,7 +2,7 @@
 Unfinished project using sfml (still in development)  
 It's just an simple space shooter
 
-## License
+## Font License
 
 Copyright 2012 The Press Start 2P Project Authors (cody@zone38.net), with Reserved Font Name "Press Start 2P."
 
