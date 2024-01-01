@@ -15,8 +15,10 @@ class Asteroid{
 
     private:
         void movement();
-        float spd = 0.8f;
-        int randomX(int a, int b);
+        float spdy = 0.8f;
+        float spdx;
+        int randomInt(int a, int b);
+        float chooseDirection();
 		Texture texture;
 		Sprite sprite;
 };

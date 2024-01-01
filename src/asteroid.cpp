@@ -7,19 +7,19 @@ Asteroid::Asteroid(){
     }
 
     sprite.setTexture(texture);
-    sprite.setPosition(randomX(50, 350), -sprite.getGlobalBounds().height - 65);
+    sprite.setPosition(randomInt(50, 350), -sprite.getGlobalBounds().height - 65);
     sprite.setScale(2, 2);
-    
+    chooseDirection();
 }
 
 bool Asteroid::isOutOfBounds(){
     //Check Bounds
-    return sprite.getPosition().x < 0 || sprite.getPosition().x > 400 || sprite.getPosition().y > 300;
+    return sprite.getPosition().x < -40 || sprite.getPosition().x > 400 || sprite.getPosition().y > 300;
 }
 
 void Asteroid::movement(){
     //Movement function
-    sprite.move(0.4, spd);
+    sprite.move(spdx, spdy);
 }
 
 void Asteroid::draw(RenderWindow &w){
@@ -34,10 +34,11 @@ void Asteroid::update(){
 
 void Asteroid::resetPos(){
     //Resets position
-    sprite.setPosition(randomX(100, 300), -sprite.getGlobalBounds().height - 65);
+    sprite.setPosition(randomInt(100, 300), -sprite.getGlobalBounds().height - 65);
+    chooseDirection();
 }
 
-int Asteroid::randomX(int a, int b){
+int Asteroid::randomInt(int a, int b){
     //Gives a random number (only used in x)
     std::random_device rd;
     std::mt19937 mt(rd()); 
@@ -45,6 +46,17 @@ int Asteroid::randomX(int a, int b){
     std::uniform_int_distribution<int> dist(a, b);
 
     return dist(mt);
+}
+
+float Asteroid::chooseDirection(){
+    //Changes asteroid direction
+    int r = randomInt(0, 1);
+    if(r == 0){
+        spdx = 0.4;
+    }else{
+        spdx = -0.4;
+    }
+    return spdx;
 }
 
 FloatRect Asteroid::getBounds(){
